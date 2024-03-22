@@ -1,13 +1,4 @@
-# Fair Resource Allocation in Federated Learning
-
-
-This repository contains the code and experiments for the paper:
-
-> [Fair Resource Allocation in Federated Learning](https://openreview.net/forum?id=ByexElSYDr)
-> 
-> [ICLR '20](https://iclr.cc/)
->
-## Addition by Zain Khalid
+# Addition by Zain Khalid
 
 Added Norm based Screening for qFFedSGD, qFFedAvg
 TODO: Reproduce results for H-nob spambase dataset.
@@ -15,6 +6,16 @@ TODO: Reproduce results for H-nob spambase dataset.
 Link: https://openreview.net/pdf?id=M4h1UAxI3b
 
  
+
+# Fair Resource Allocation in Federated Learning
+
+
+This repository contains the code and experiments for the paper:
+
+> [Fair Resource Allocation in Federated Learning](https://openreview.net/forum?id=ByexElSYDr)
+> GitHub: https://github.com/litian96/fair_flearn
+> [ICLR '20](https://iclr.cc/)
+
 
 ## Preparation
 
