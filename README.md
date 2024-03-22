@@ -1,6 +1,7 @@
 # Addition by Zain Khalid
 
-Added Norm based Screening for qFFedSGD, qFFedAvg
+Added Norm based Screening for qFFedSGD, qFFedAvg.
+
 TODO: Reproduce results for H-nob spambase dataset.
 
 Link: https://openreview.net/pdf?id=M4h1UAxI3b
