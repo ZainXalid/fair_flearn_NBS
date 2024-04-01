@@ -10,7 +10,7 @@ import seaborn as sns
 accuracies = [ 
 "./log_vehicle/qffedavg_samp2_run1_q0_20_test.csv",
 "./log_vehicle/qffedavg_samp2_run1_q5_20_test.csv",
-"./log_vehicle/qffedavg_samp6_run1_q0_20_test.csv"
+"./log_vehicle/qffedavg_samp1_run1_q0_20_test.csv"
 ]
 
 flag = "Testing"

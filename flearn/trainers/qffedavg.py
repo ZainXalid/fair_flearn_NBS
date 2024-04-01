@@ -42,7 +42,8 @@ class Server(BaseFedarated):
 
             Deltas = []
             hs = []
-
+            norm = []
+            
             selected_clients = selected_clients.tolist()
 
             for c in selected_clients:                
@@ -60,40 +61,45 @@ class Server(BaseFedarated):
                 
                 # estimation of the local Lipchitz constant
                 hs.append(self.q * np.float_power(loss+1e-10, (self.q-1)) * norm_grad(grads) + (1.0/self.learning_rate) * np.float_power(loss+1e-10, self.q))
+                
+                #For NBS (Added by Zain)
+                norm.append(loss)
 
+
+            
+
+            
             #ToDo: Add norm based screening
-            deltas_to_aggregate, hs_to_aggregate = self.Norm_Screen(Deltas, hs, b=0.2)
-            
-            # original aggregate using the dynamic step-size
-            # self.latest_model = self.aggregate2(weights_before, Deltas, hs)
-            
-            #ToDo: Modified Aggregate
-            # aggregate using the dynamic step-size
+            deltas_to_aggregate, hs_to_aggregate = self.Norm_Screen(Deltas, hs, norm, b=0) #b-screening param (0.0 - 1.0)
             self.latest_model = self.aggregate2(weights_before, deltas_to_aggregate, hs_to_aggregate)
             
-    def Norm_Screen(self, Deltas, hs, b):
-        
+            # # original aggregate using the dynamic step-size
+            # self.latest_model = self.aggregate2(weights_before, Deltas, hs)
+            
+    
+    def Norm_Screen(self, Deltas, hs, norm, b):
         total_deltas = len(Deltas)
-        b = int(total_deltas * b / 100)  # Convert percentage to number of deltas to eliminate
+        b = int(total_deltas * (1 - b))  # Convert percentage to number of deltas to keep
         
         deltas_to_keep = []
         hs_to_keep = []
+        triplets = []
         
-        # Calculate norms of each delta
-        norms = [np.linalg.norm(delta) for delta in Deltas]
-
-        # Sort indices of deltas based on norms in descending order
-        sorted_indices = np.argsort(norms)[::-1]
-
-        # Get top b indices with largest norms
-        top_b_indices = sorted_indices[:b]
-
-        # Keep deltas and hs with indices not in top_b_indices
+        # Calculate norms of each delta and store as triplets
         for i, delta in enumerate(Deltas):
-            if i not in top_b_indices:
-                deltas_to_keep.append(delta)
-                hs_to_keep.append(hs[i])
-
+            triplets.append((delta, hs[i], norm[i]))
+        
+        # Sort triplets based on norm values in ascending order
+        sorted_triplets = sorted(triplets, key=lambda x: x[2], reverse=False)
+        
+        # Select the top b triplets
+        top_b_triplets = sorted_triplets[:b]
+        
+        # Extract deltas and hs from top b triplets
+        for triplet in top_b_triplets:
+            deltas_to_keep.append(triplet[0])
+            hs_to_keep.append(triplet[1])
+        
         return deltas_to_keep, hs_to_keep
 
                     
